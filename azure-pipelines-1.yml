@@ -25,6 +25,7 @@ steps:
     command: 'validate'
     workingDirectory: '$(System.DefaultWorkingDirectory)/'
 - task: TerraformTask@5
+  displayName: task 4-plan
   inputs:
     provider: 'azurerm'
     command: 'plan'
@@ -32,6 +33,7 @@ steps:
     environmentServiceNameAzureRM: 'psservice'
     environmentAzureRmOverrideSubscriptionID: 'fc890557-6a78-4e91-9eac-5aff85b5fc09'
 - task: TerraformTask@5
+  displayName: task 5-apply
   inputs:
     provider: 'azurerm'
     command: 'apply'
@@ -40,6 +42,7 @@ steps:
     environmentAzureRmOverrideSubscriptionID: 'fc890557-6a78-4e91-9eac-5aff85b5fc09'
 
 - task: TerraformTask@5
+  displayName: task 6-show
   inputs:
     provider: 'azurerm'
     command: 'show'
