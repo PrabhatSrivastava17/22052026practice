@@ -1,4 +1,4 @@
-name:prabhatpipeine
+name: prabhatpipeine
 
 trigger: none 
 
@@ -6,12 +6,12 @@ pool: pspool
 
 steps:
 - task: TerraformInstaller@1
-  displayname:task1-toolinstaller
+  displayName: task1-toolinstaller
   inputs:
     terraformVersion: 'latest'
 
 - task: TerraformTask@5
-   displayname:task1-init
+  displayName: task1-init
   inputs:
     provider: 'azurerm'
     command: 'init'
@@ -23,15 +23,14 @@ steps:
     backendAzureRmContainerName: 'saurabhcontainer'
     backendAzureRmKey: '.tfstate'
 
- - task: TerraformTask@5
-   displayname:task2-validate
-   inputs:
-     provider: 'azurerm'
-     command: 'validate'
-     workingDirectory: '$(System.DefaultWorkingDirectory)/'
-
 - task: TerraformTask@5
-  displayname:task3-plan
+  displayName: task2-plan
+  inputs:
+    provider: 'azurerm'
+    command: 'validate'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/'
+- task: TerraformTask@5
+  displayName: task3-plan
   inputs:
     provider: 'azurerm'
     command: 'plan'
@@ -40,7 +39,7 @@ steps:
     environmentAzureRmOverrideSubscriptionID: 'fc890557-6a78-4e91-9eac-5aff85b5fc09'
 
 - task: TerraformTask@5
-  displayname:task3-apply
+  displayName: task3-apply
   inputs:
     provider: 'azurerm'
     command: 'apply'
@@ -49,7 +48,7 @@ steps:
     environmentServiceNameAzureRM: 'prabhatservice'
     environmentAzureRmOverrideSubscriptionID: 'fc890557-6a78-4e91-9eac-5aff85b5fc09'
 - task: TerraformTask@5
-  displayname:task4-show
+  displayName: task4-show
   inputs:
     provider: 'azurerm'
     command: 'show'
