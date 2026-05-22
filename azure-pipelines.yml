@@ -1,0 +1,63 @@
+name:prabhatpipeine
+
+trigger: none 
+
+pool: pspool
+
+steps:
+- task: TerraformInstaller@1
+  displayname:task1-toolinstaller
+  inputs:
+    terraformVersion: 'latest'
+
+- task: TerraformTask@5
+   displayname:task1-init
+  inputs:
+    provider: 'azurerm'
+    command: 'init'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/'
+    backendServiceArm: 'prabhatservice'
+    backendAzureRmOverrideSubscriptionID: 'fc890557-6a78-4e91-9eac-5aff85b5fc09'
+    backendAzureRmResourceGroupName: 'saurabhrg'
+    backendAzureRmStorageAccountName: 'saurabhstg'
+    backendAzureRmContainerName: 'saurabhcontainer'
+    backendAzureRmKey: '.tfstate'
+
+ - task: TerraformTask@5
+   displayname:task2-validate
+   inputs:
+     provider: 'azurerm'
+     command: 'validate'
+     workingDirectory: '$(System.DefaultWorkingDirectory)/'
+
+- task: TerraformTask@5
+  displayname:task3-plan
+  inputs:
+    provider: 'azurerm'
+    command: 'plan'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/'
+    environmentServiceNameAzureRM: 'prabhatservice'
+    environmentAzureRmOverrideSubscriptionID: 'fc890557-6a78-4e91-9eac-5aff85b5fc09'
+
+- task: TerraformTask@5
+  displayname:task3-apply
+  inputs:
+    provider: 'azurerm'
+    command: 'apply'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/'
+    commandOptions: '-auto-approve'
+    environmentServiceNameAzureRM: 'prabhatservice'
+    environmentAzureRmOverrideSubscriptionID: 'fc890557-6a78-4e91-9eac-5aff85b5fc09'
+- task: TerraformTask@5
+  displayname:task4-show
+  inputs:
+    provider: 'azurerm'
+    command: 'show'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/'
+    commandOptions: 'fc890557-6a78-4e91-9eac-5aff85b5fc09'
+    outputTo: 'console'
+    outputFormat: 'default'
+    environmentServiceNameAzureRM: 'prabhatservice'
+
+
+
