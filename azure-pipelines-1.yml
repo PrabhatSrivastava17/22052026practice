@@ -1,0 +1,50 @@
+name: rg-pipeline
+trigger: none 
+pool: pspool
+steps: 
+- task: TerraformInstaller@1
+  displayName Task1
+  inputs:
+    terraformVersion: 'latest'
+- task: TerraformTask@5
+    displayName Task2 init
+  inputs:
+    provider: 'azurerm'
+    command: 'init'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/'
+    backendServiceArm: 'psservice'
+    backendAzureRmOverrideSubscriptionID: 'fc890557-6a78-4e91-9eac-5aff85b5fc09'
+    backendAzureRmResourceGroupName: 'saurabhrg'
+    backendAzureRmStorageAccountName: 'saurabhstg'
+    backendAzureRmContainerName: 'saurabhcontainer'
+    backendAzureRmKey: '.tfstate'
+- task: TerraformTask@5
+  displayName Task3 validate
+  inputs:
+    provider: 'azurerm'
+    command: 'validate'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/'
+- task: TerraformTask@5
+    displayName Task4 plan
+  inputs:
+    provider: 'azurerm'
+    command: 'plan'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/'
+    environmentServiceNameAzureRM: 'psservice'
+    environmentAzureRmOverrideSubscriptionID: 'fc890557-6a78-4e91-9eac-5aff85b5fc09'
+- task: TerraformTask@5
+  displayName Task45 apply
+  inputs:
+    provider: 'azurerm'
+    command: 'apply'
+    commandOptions: '-auto-approve'
+    environmentServiceNameAzureRM: 'psservice'
+    environmentAzureRmOverrideSubscriptionID: 'fc890557-6a78-4e91-9eac-5aff85b5fc09'
+- task: TerraformTask@5
+  inputs:
+    provider: 'azurerm'
+    command: 'show'
+    outputTo: 'console'
+    outputFormat: 'default'
+    environmentServiceNameAzureRM: 'psservice'
+    environmentAzureRmOverrideSubscriptionID: 'fc890557-6a78-4e91-9eac-5aff85b5fc09'
